@@ -1,3 +1,6 @@
+server:
+  port: 40680
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:40654/pep_db

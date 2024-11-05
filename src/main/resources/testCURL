@@ -1,0 +1,14 @@
+GET
+localhost:40680/api/v1/user/test
+
+POST
+localhost:40680/api/v1/user/register
+{
+   "name": "TestName",
+   "email": "test@name.ru",
+   "pass": "qwerty",
+   "roleList": [
+       {"name": "admin"},
+       {"name": "user"}
+   ]
+}

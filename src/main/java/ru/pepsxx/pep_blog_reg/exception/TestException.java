@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TestException extends RuntimeException {
     public TestException(String message) {
+        super(message);
         log.error(message);
     }
 }

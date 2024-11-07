@@ -1,4 +1,4 @@
-package ru.pepsxx.pep_blog_reg.Controller;
+package ru.pepsxx.pep_blog_reg.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.pepsxx.pep_blog_reg.dto.userDto;
+import ru.pepsxx.pep_blog_reg.dto.UserDto;
 import ru.pepsxx.pep_blog_reg.validator.UserDtoValidator;
 
 import java.util.Objects;
@@ -15,7 +15,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
-public class userController {
+public class UserController {
 
     private final UserDtoValidator userDtoValidator;
 
@@ -25,7 +25,7 @@ public class userController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody @Valid userDto userDto, BindingResult bindingResult) {
+    public ResponseEntity<String> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
         userDtoValidator.validate(userDto, bindingResult);
         if (bindingResult.hasErrors()) {
             String message = "Поле: " +

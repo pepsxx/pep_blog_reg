@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
-public record userDto(
+public record UserDto(
         @NotBlank
         String name,
         @Email
         String email,
         String pass,
-        List<roleDto> roleList) {
+        List<RoleDto> roleList) {
 }

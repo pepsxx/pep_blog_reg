@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
+import ru.pepsxx.pep_blog_reg.exception.TestException;
 import ru.pepsxx.pep_blog_reg.validator.UserDtoValidator;
 
 import java.util.Objects;
@@ -19,9 +20,14 @@ public class UserController {
 
     private final UserDtoValidator userDtoValidator;
 
-    @GetMapping("test")
-    public ResponseEntity<String> test() {
+    @GetMapping("test/ok")
+    public ResponseEntity<String> testOk() {
         return ResponseEntity.ok("Test Ok");
+    }
+
+    @GetMapping("test/bad")
+    public ResponseEntity<String> test() {
+        throw new TestException("Test Bad Exception");
     }
 
     @PostMapping("register")

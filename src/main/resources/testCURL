@@ -1,5 +1,6 @@
 GET
-localhost:40680/api/v1/user/test
+localhost:40680/api/v1/user/test/ok
+localhost:40680/api/v1/user/test/bad
 
 POST
 localhost:40680/api/v1/user/register

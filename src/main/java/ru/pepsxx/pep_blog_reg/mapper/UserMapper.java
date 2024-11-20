@@ -14,7 +14,12 @@ public class UserMapper {
         user.setName(userDto.name());
         user.setEmail(userDto.email());
         user.setPass(userDto.pass());
-        user.setUserRole(UserRole.valueOf(userDto.userRole().name()));
+
+        UserRole userRole = userDto.userRole().name().isEmpty()
+                ? UserRole.ROLE_USER
+                : UserRole.valueOf(userDto.userRole().name());
+
+        user.setUserRole(userRole);
         return user;
     }
 

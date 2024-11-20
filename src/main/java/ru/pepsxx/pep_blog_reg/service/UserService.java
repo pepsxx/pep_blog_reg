@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
 import ru.pepsxx.pep_blog_reg.entity.User;
+import ru.pepsxx.pep_blog_reg.exception.UserAlreadyExists;
 import ru.pepsxx.pep_blog_reg.mapper.UserMapper;
+import ru.pepsxx.pep_blog_reg.repository.UserRepository;
 
 @Slf4j
 @Service
@@ -13,13 +15,16 @@ import ru.pepsxx.pep_blog_reg.mapper.UserMapper;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
-    public UserDto getUser(UserDto userDto) {
-        log.info(userDto.toString());
+    public UserDto registerUser(UserDto userDto) {
         User user = userMapper.userDtoToUser(userDto);
-        log.info(user.toString());
-        userDto = userMapper.userUserToUserDto(user);
-        log.info(userDto.toString());
-        return userDto;
+
+        userRepository.findFirstByEmail(user.getEmail())
+                .ifPresent(u -> {
+                    throw new UserAlreadyExists("Пользователь c email: %s уже существует".formatted(u.getEmail()));
+                });
+
+        return userMapper.userUserToUserDto(userRepository.save(user));
     }
 }

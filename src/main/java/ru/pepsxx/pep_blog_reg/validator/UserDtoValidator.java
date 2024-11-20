@@ -24,8 +24,12 @@ public class UserDtoValidator implements Validator {
         if (userDto.pass().length() < 6) {
             errors.rejectValue("pass", "", "Пароль должен быть больше 6 символов");
         }
+
+        String userName = userDto.userRole().name().isEmpty()
+                ? UserRole.ROLE_USER.name()
+                : userDto.userRole().name();
         Arrays.stream(UserRole.values())
-                .filter(r -> userDto.userRole().name().equals(r.name()))
+                .filter(r -> userName.equals(r.name()))
                 .findFirst()
                 .orElseGet(() -> {
                     errors.rejectValue("userRole", "", "Не существующая роль");

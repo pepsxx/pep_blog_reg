@@ -38,7 +38,7 @@ public class UserController {
             throw new ObjectNotValidated(message);
         }
 
-        return ResponseEntity.ok().body(userService.getUser(userDto));
+        return ResponseEntity.ok().body(userService.registerUser(userDto));
     }
 }
 

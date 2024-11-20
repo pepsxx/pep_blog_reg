@@ -7,7 +7,7 @@ CREATE SEQUENCE IF NOT EXISTS user_seq
 CREATE TABLE IF NOT EXISTS user_role
 (
     id   BIGINT      NOT NULL UNIQUE PRIMARY KEY,
-    name VARCHAR(16) NOT NULL UNIQUE
+    name VARCHAR(16) NOT NULL UNIQUE CHECK ( name IN ('ROLE_ADMIN', 'ROLE_USER'))
 );
 
 --changeset pep_sxx:4
@@ -17,5 +17,5 @@ CREATE TABLE IF NOT EXISTS "user"
     name    VARCHAR(64) NOT NULL,
     email   VARCHAR(64) NOT NULL UNIQUE,
     pass    VARCHAR(64) NOT NULL,
-    role_id INTEGER REFERENCES user_role (id)
+    role_id BIGINT REFERENCES user_role (id)
 );

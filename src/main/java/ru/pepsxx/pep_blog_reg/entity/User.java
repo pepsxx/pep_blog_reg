@@ -9,6 +9,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,5 +18,6 @@ public class User {
     private String email;
     private String pass;
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "role_id")
     private UserRole userRole;
 }

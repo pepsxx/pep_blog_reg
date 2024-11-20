@@ -1,10 +1,14 @@
 package ru.pepsxx.pep_blog_reg.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Setter
+@Getter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

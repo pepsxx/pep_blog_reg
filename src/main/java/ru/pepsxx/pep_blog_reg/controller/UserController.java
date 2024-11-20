@@ -5,14 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
-import ru.pepsxx.pep_blog_reg.entity.User;
-import ru.pepsxx.pep_blog_reg.exception.TestException;
-import ru.pepsxx.pep_blog_reg.mapper.UserMapper;
+import ru.pepsxx.pep_blog_reg.exception.ObjectNotValidated;
+import ru.pepsxx.pep_blog_reg.service.UserService;
 import ru.pepsxx.pep_blog_reg.validator.UserDtoValidator;
 
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -20,35 +20,26 @@ import java.util.Objects;
 @RequestMapping("/api/v1/user")
 public class UserController {
 
+    private final UserService userService;
     private final UserDtoValidator userDtoValidator;
-    private final UserMapper userMapper;
-
-    @GetMapping("test/ok")
-    public ResponseEntity<String> testOk() {
-        return ResponseEntity.ok("Test Ok");
-    }
-
-    @GetMapping("test/bad")
-    public ResponseEntity<String> test() {
-        throw new TestException("Test Bad Exception");
-    }
 
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+    public ResponseEntity<UserDto> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+
         userDtoValidator.validate(userDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            String message = "Поле: " +
-                    Objects.requireNonNull(bindingResult.getFieldError()).getField() + " - " +
-                    bindingResult.getFieldError().getDefaultMessage();
-            log.error(message);
-            return ResponseEntity.badRequest().body(message);
+            String message = bindingResult.getAllErrors()
+                    .stream()
+                    .filter(e -> e instanceof FieldError)
+                    .map(FieldError.class::cast)
+                    .map(e -> "Поле: %s - %s".formatted(e.getField(), e.getDefaultMessage()))
+                    .peek(log::error)
+                    .collect(Collectors.joining("\n"));
+            throw new ObjectNotValidated(message);
         }
-        log.info(userDto.toString());
 
-        User user = userMapper.userDtoToUser(userDto);
-        log.info(user.toString());
-
-        return ResponseEntity.ok().body(userDto.toString());
+        return ResponseEntity.ok().body(userService.getUser(userDto));
     }
-
 }
+
+

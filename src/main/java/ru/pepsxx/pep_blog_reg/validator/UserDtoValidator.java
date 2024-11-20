@@ -1,23 +1,35 @@
 package ru.pepsxx.pep_blog_reg.validator;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
+import ru.pepsxx.pep_blog_reg.entity.UserRole;
+
+import java.util.Arrays;
 
 @Component
 public class UserDtoValidator implements Validator {
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(@Nullable Class<?> clazz) {
         return UserDto.class.equals(clazz);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(@Nonnull Object target, @Nonnull Errors errors) {
         UserDto userDto = (UserDto) target;
-        if (userDto.pass().length()<6) {
+        if (userDto.pass().length() < 6) {
             errors.rejectValue("pass", "", "Пароль должен быть больше 6 символов");
         }
+        Arrays.stream(UserRole.values())
+                .filter(r -> userDto.userRole().name().equals(r.name()))
+                .findFirst()
+                .orElseGet(() -> {
+                    errors.rejectValue("userRole", "", "Не существующая роль");
+                    return null;
+                });
     }
 }

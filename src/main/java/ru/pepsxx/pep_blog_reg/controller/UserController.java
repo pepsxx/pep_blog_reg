@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
+import ru.pepsxx.pep_blog_reg.entity.User;
 import ru.pepsxx.pep_blog_reg.exception.TestException;
+import ru.pepsxx.pep_blog_reg.mapper.UserMapper;
 import ru.pepsxx.pep_blog_reg.validator.UserDtoValidator;
 
 import java.util.Objects;
@@ -19,6 +21,7 @@ import java.util.Objects;
 public class UserController {
 
     private final UserDtoValidator userDtoValidator;
+    private final UserMapper userMapper;
 
     @GetMapping("test/ok")
     public ResponseEntity<String> testOk() {
@@ -41,6 +44,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(message);
         }
         log.info(userDto.toString());
+
+        User user = userMapper.userDtoToUser(userDto);
+        log.info(user.toString());
+
         return ResponseEntity.ok().body(userDto.toString());
     }
 

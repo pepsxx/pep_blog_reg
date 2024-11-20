@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS user_role
 --changeset pep_sxx:4
 CREATE TABLE IF NOT EXISTS "user"
 (
-    id      BIGINT DEFAULT nextval('user_seq') PRIMARY KEY,
-    name    VARCHAR(64) NOT NULL,
-    email   VARCHAR(64) NOT NULL UNIQUE,
-    pass    VARCHAR(64) NOT NULL,
-    role_id BIGINT REFERENCES user_role (id)
+    id                    BIGINT DEFAULT nextval('user_seq') PRIMARY KEY,
+    name                  VARCHAR(64) NOT NULL,
+    email                 VARCHAR(64) NOT NULL UNIQUE,
+    pass                  VARCHAR(64) NOT NULL,
+    data_time_registering TIMESTAMP   NOT NULL,
+    role_id               BIGINT REFERENCES user_role (id)
 );

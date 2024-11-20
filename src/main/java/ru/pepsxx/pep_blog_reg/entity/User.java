@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 @Entity
 @Setter
 @Getter
@@ -17,6 +19,8 @@ public class User {
     private String name;
     private String email;
     private String pass;
+    @Column(name = "data_time_registering")
+    private Timestamp dataTimeRegistering;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "role_id")
     private UserRole userRole;

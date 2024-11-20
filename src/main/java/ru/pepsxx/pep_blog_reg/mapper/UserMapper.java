@@ -6,6 +6,8 @@ import ru.pepsxx.pep_blog_reg.dto.UserRoleDto;
 import ru.pepsxx.pep_blog_reg.entity.User;
 import ru.pepsxx.pep_blog_reg.entity.UserRole;
 
+import java.sql.Timestamp;
+
 @Component
 public class UserMapper {
 
@@ -14,6 +16,7 @@ public class UserMapper {
         user.setName(userDto.name());
         user.setEmail(userDto.email());
         user.setPass(userDto.pass());
+        user.setDataTimeRegistering(new Timestamp(System.currentTimeMillis()));
 
         UserRole userRole = userDto.userRole().name().isEmpty()
                 ? UserRole.ROLE_USER

@@ -23,6 +23,8 @@ public class UserDtoValidator implements Validator {
         UserDto userDto = (UserDto) target;
         if (userDto.pass().length() < 6) {
             errors.rejectValue("pass", "", "Пароль должен быть больше 6 символов");
+        } else if (!userDto.pass().equals(userDto.passwordRepeat())) {
+            errors.rejectValue("pass", "", "Пароли не совпадают");
         }
 
         String userName = userDto.userRole().name().isEmpty()

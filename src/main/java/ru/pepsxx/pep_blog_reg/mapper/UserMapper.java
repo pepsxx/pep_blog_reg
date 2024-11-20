@@ -5,6 +5,7 @@ import ru.pepsxx.pep_blog_reg.dto.UserDto;
 import ru.pepsxx.pep_blog_reg.dto.UserRoleDto;
 import ru.pepsxx.pep_blog_reg.entity.User;
 import ru.pepsxx.pep_blog_reg.entity.UserRole;
+import ru.pepsxx.pep_blog_reg.util.HashCodeUtil;
 
 import java.sql.Timestamp;
 
@@ -15,7 +16,7 @@ public class UserMapper {
         User user = new User();
         user.setName(userDto.name());
         user.setEmail(userDto.email());
-        user.setPass(userDto.pass());
+        user.setPass(HashCodeUtil.getSHA256Hash(userDto.pass()));
         user.setDataTimeRegistering(new Timestamp(System.currentTimeMillis()));
 
         UserRole userRole = userDto.userRole().name().isEmpty()
@@ -31,6 +32,8 @@ public class UserMapper {
                 user.getName(),
                 user.getEmail(),
                 null,
+                null,
+                user.getDataTimeRegistering(),
                 new UserRoleDto(user.getUserRole().name())
         );
     }

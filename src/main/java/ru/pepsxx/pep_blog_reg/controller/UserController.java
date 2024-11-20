@@ -8,10 +8,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
+import ru.pepsxx.pep_blog_reg.dto.UserDtoException;
 import ru.pepsxx.pep_blog_reg.exception.ObjectNotValidated;
 import ru.pepsxx.pep_blog_reg.service.UserService;
 import ru.pepsxx.pep_blog_reg.validator.UserDtoValidator;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,14 +31,16 @@ public class UserController {
 
         userDtoValidator.validate(userDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            String message = bindingResult.getAllErrors()
+
+            Map<String, String> errorsMap = bindingResult.getAllErrors()
                     .stream()
                     .filter(e -> e instanceof FieldError)
                     .map(FieldError.class::cast)
-                    .map(e -> "Поле: %s - %s".formatted(e.getField(), e.getDefaultMessage()))
-                    .peek(log::error)
-                    .collect(Collectors.joining("\n"));
-            throw new ObjectNotValidated(message);
+                    .collect(Collectors.toMap(
+                            FieldError::getField,
+                            fe -> Optional.ofNullable(fe.getDefaultMessage()).orElse("")));
+            throw new ObjectNotValidated(new UserDtoException("Validation Errors", errorsMap));
+
         }
 
         return ResponseEntity.ok().body(userService.registerUser(userDto));

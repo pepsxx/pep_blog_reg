@@ -52,6 +52,6 @@ public class UserMapper {
     }
 
     public static UserRoleDto userRoleToUserRoleDto(UserRole userRole) {
-        return new UserRoleDto(userRole.getRole().name());
+        return new UserRoleDto(userRole.getName().name());
     }
 }

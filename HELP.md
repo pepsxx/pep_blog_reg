@@ -22,5 +22,5 @@ pep_blog_reg
 12. Добавить Mapping.
 13. Добавить Service.
 14. Добавить Repository.
-15. Добавить Swagger.
+15. Добавить Swagger (http://localhost:40680/swagger-ui/index.html#/user-controller/register).
 16. Добавить Testing.

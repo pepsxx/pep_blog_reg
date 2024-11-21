@@ -6,11 +6,11 @@ VALUES (1, 'Bob', 'bob@mail.ru', 'D/4avRoIIVNTwjPW4AlhPpXuxCU4Mqdhryj/N6xaFQw=',
        (2, 'Tom', 'tom@mail.ru', 'D/4avRoIIVNTwjPW4AlhPpXuxCU4Mqdhryj/N6xaFQw=', now());
 
 --changeset pep_sxx:2
-INSERT INTO role (ordinal, name)
+INSERT INTO role (id, name)
 VALUES (0, 'ROLE_ADMIN'),
-       (1,'ROLE_USER');
---
--- --changeset pep_sxx:3
--- INSERT INTO roles_users (user_id, role_id)
--- VALUES (1,0),
---        (2,1);
+       (1, 'ROLE_USER');
+
+--changeset pep_sxx:3
+INSERT INTO roles_users (user_id, role_id)
+VALUES (1, 0),
+       (2, 1);

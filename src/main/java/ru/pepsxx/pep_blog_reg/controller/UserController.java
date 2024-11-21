@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.pepsxx.pep_blog_reg.dto.IdModel;
 import ru.pepsxx.pep_blog_reg.dto.UserDto;
 import ru.pepsxx.pep_blog_reg.dto.UserDtoException;
-import ru.pepsxx.pep_blog_reg.exception.ObjectNotValidated;
+import ru.pepsxx.pep_blog_reg.exception.UserNotValidated;
 import ru.pepsxx.pep_blog_reg.service.UserService;
 import ru.pepsxx.pep_blog_reg.validator.UserDtoValidator;
 
@@ -39,12 +40,49 @@ public class UserController {
                     .collect(Collectors.toMap(
                             FieldError::getField,
                             field -> Optional.ofNullable(field.getDefaultMessage()).orElse("")));
-            throw new ObjectNotValidated(new UserDtoException("Validation Errors", errorsMap));
+            throw new UserNotValidated(new UserDtoException("Validation Errors", errorsMap));
 
         }
 
-        return ResponseEntity.ok().body(userService.registerUser(userDto));
+        userDto = userService.registerUser(userDto);
+        log.info("User registered: {}", userDto);
+        return ResponseEntity.ok().body(userDto);
     }
+
+    @PostMapping("search_in_body")
+    public ResponseEntity<UserDto> searchInBody(@RequestBody IdModel idModel) {
+        UserDto userDto = userService.findUserById(idModel);
+        loggingUserSearches(userDto);
+        return ResponseEntity.ok().body(userDto);
+    }
+
+    @GetMapping("search_in_path/{id}")
+    public ResponseEntity<UserDto> searchInPath(@PathVariable Long id) {
+        IdModel idModel = new IdModel(id);
+        UserDto userDto = userService.findUserById(idModel);
+        loggingUserSearches(userDto);
+        return ResponseEntity.ok().body(userDto);
+    }
+
+    @GetMapping("search_in_param")
+    public ResponseEntity<UserDto> searchInParam(@RequestParam Long id) {
+        IdModel idModel = new IdModel(id);
+        UserDto userDto = userService.findUserById(idModel);
+        loggingUserSearches(userDto);
+        return ResponseEntity.ok().body(userDto);
+    }
+
+    @GetMapping("search_in_model")
+    public ResponseEntity<UserDto> searchInModel(@ModelAttribute IdModel idModel) {
+        UserDto userDto = userService.findUserById(idModel);
+        loggingUserSearches(userDto);
+        return ResponseEntity.ok().body(userDto);
+    }
+
+    private static void loggingUserSearches(UserDto userDto) {
+        log.info("User searched: {}", userDto);
+    }
+
 }
 
 

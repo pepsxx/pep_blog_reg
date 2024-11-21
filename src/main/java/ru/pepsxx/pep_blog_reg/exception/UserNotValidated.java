@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
-public class ObjectNotValidated extends RuntimeException {
+public class UserNotValidated extends RuntimeException {
 
     private final UserDtoException userDtoException;
 
-    public ObjectNotValidated(UserDtoException userDtoException) {
+    public UserNotValidated(UserDtoException userDtoException) {
         super(userDtoException.message());
         this.userDtoException = userDtoException;
         log.error(userDtoException.errorsMap()

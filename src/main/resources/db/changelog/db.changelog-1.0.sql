@@ -17,13 +17,14 @@ CREATE TABLE IF NOT EXISTS "user"
 --changeset pep_sxx:3
 CREATE TABLE IF NOT EXISTS role
 (
-    ordinal BIGINT PRIMARY KEY,
-    name    VARCHAR(16) NOT NULL UNIQUE CHECK ( name IN ('ROLE_ADMIN', 'ROLE_USER'))
+    id   BIGINT PRIMARY KEY,
+    name VARCHAR(16) NOT NULL UNIQUE CHECK ( name IN ('ROLE_ADMIN', 'ROLE_USER'))
 );
 
+--changeset pep_sxx:4
 CREATE TABLE IF NOT EXISTS roles_users
 (
-    user_id BIGINT REFERENCES "user"(id),
-    role_id BIGINT REFERENCES role(ordinal),
+    user_id BIGINT REFERENCES "user" (id),
+    role_id BIGINT REFERENCES role (id),
     PRIMARY KEY (role_id, user_id)
 );

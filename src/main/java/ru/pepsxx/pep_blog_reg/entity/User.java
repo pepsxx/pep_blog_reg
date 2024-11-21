@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -21,7 +23,12 @@ public class User {
     private String pass;
     @Column(name = "data_time_registering")
     private Timestamp dataTimeRegistering;
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "role_id")
-    private UserRole userRole;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "roles_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<UserRole> roles = new HashSet<>();
 }

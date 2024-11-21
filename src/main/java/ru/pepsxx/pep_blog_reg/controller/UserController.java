@@ -34,11 +34,11 @@ public class UserController {
 
             Map<String, String> errorsMap = bindingResult.getAllErrors()
                     .stream()
-                    .filter(e -> e instanceof FieldError)
+                    .filter(error -> error instanceof FieldError)
                     .map(FieldError.class::cast)
                     .collect(Collectors.toMap(
                             FieldError::getField,
-                            fe -> Optional.ofNullable(fe.getDefaultMessage()).orElse("")));
+                            field -> Optional.ofNullable(field.getDefaultMessage()).orElse("")));
             throw new ObjectNotValidated(new UserDtoException("Validation Errors", errorsMap));
 
         }

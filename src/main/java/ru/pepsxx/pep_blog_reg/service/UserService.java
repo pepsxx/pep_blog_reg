@@ -21,11 +21,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDto registerUser(UserDto userDto) {
+
         User user = userMapper.userDtoToUser(userDto);
 
         userRepository.findFirstByEmail(user.getEmail())
                 .ifPresent(u -> {
-//                    throw new UserAlreadyExists("Пользователь c email: %s уже существует".formatted(u.getEmail()));
                             throw new UserAlreadyExists(new UserDtoException(
                                     "User Already Exists",
                                     Map.of(
